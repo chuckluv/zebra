@@ -12,7 +12,7 @@ func NewRegistration() *cobra.Command {
 	registerCmd := &cobra.Command{ //nolint:exhaustivestruct,exhaustruct
 		Use:          "registration",
 		Short:        "register for zebra",
-		RunE:         RegisterReq,
+		RunE:         registerReq,
 		SilenceUsage: true,
 		Args:         cobra.ExactArgs(1),
 	}
@@ -20,17 +20,18 @@ func NewRegistration() *cobra.Command {
 	return registerCmd
 }
 
-func RegisterReq(cmd *cobra.Command, arg []string) error {
+func registerReq(cmd *cobra.Command, arg []string) error {
 	cfgFile := cmd.Flag("config").Value.String()
-	log.Default().Printf("Flag Value: %v", cfgFile)
-
 	cfg, err := Load(cfgFile)
+
 	if err != nil {
 		return err
 	}
 
 	client, err := NewClient(cfg)
 	if err != nil {
+		log.Default().Printf("Error: %v", err)
+
 		return err
 	}
 
@@ -47,7 +48,7 @@ func RegisterReq(cmd *cobra.Command, arg []string) error {
 		Key:      cfg.Key,
 	}
 
-	resCode, err := client.Post("/register", reqBody, user)
+	resCode, err := client.Post("api/v1/resources", reqBody, user)
 	if resCode != http.StatusOK {
 		return err
 	}
