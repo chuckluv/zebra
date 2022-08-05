@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/project-safari/zebra/auth"
@@ -9,7 +8,7 @@ import (
 )
 
 func NewRegistration() *cobra.Command {
-	registerCmd := &cobra.Command{ //nolint:exhaustivestruct,exhaustruct
+	registerCmd := &cobra.Command{
 		Use:          "registration",
 		Short:        "register for zebra",
 		RunE:         registerReq,
@@ -22,16 +21,14 @@ func NewRegistration() *cobra.Command {
 
 func registerReq(cmd *cobra.Command, arg []string) error {
 	cfgFile := cmd.Flag("config").Value.String()
-	cfg, err := Load(cfgFile)
 
+	cfg, err := Load(cfgFile)
 	if err != nil {
 		return err
 	}
 
 	client, err := NewClient(cfg)
 	if err != nil {
-		log.Default().Printf("Error: %v", err)
-
 		return err
 	}
 
@@ -48,7 +45,7 @@ func registerReq(cmd *cobra.Command, arg []string) error {
 		Key:      cfg.Key,
 	}
 
-	resCode, err := client.Post("api/v1/resources", reqBody, user)
+	resCode, err := client.Post("/register", reqBody, user)
 	if resCode != http.StatusOK {
 		return err
 	}
