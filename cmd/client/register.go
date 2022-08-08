@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/project-safari/zebra/auth"
@@ -8,10 +9,10 @@ import (
 )
 
 func NewRegistration() *cobra.Command {
-	registerCmd := &cobra.Command{
+	registerCmd := &cobra.Command{ //nolint:exhaustivestruct,exhaustruct
 		Use:          "registration",
 		Short:        "register for zebra",
-		RunE:         registerReq,
+		RunE:         RegisterReq,
 		SilenceUsage: true,
 		Args:         cobra.ExactArgs(1),
 	}
@@ -19,8 +20,9 @@ func NewRegistration() *cobra.Command {
 	return registerCmd
 }
 
-func registerReq(cmd *cobra.Command, arg []string) error {
+func RegisterReq(cmd *cobra.Command, arg []string) error {
 	cfgFile := cmd.Flag("config").Value.String()
+	log.Default().Printf("Flag Value: %v", cfgFile)
 
 	cfg, err := Load(cfgFile)
 	if err != nil {
