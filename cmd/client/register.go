@@ -22,6 +22,7 @@ func NewRegistration() *cobra.Command {
 
 func registerReq(cmd *cobra.Command, arg []string) error {
 	cfgFile := cmd.Flag("config").Value.String()
+
 	cfg, err := Load(cfgFile)
 
 	if err != nil {
