@@ -42,4 +42,7 @@ func TestGettingStatus(t *testing.T) {
 
 	res.Status.Fault = zebra.Fault(100)
 	assert.NotNil(res.Validate(ctx))
+
+	res.UpdateLeaseState(1)
+	assert.Equal(zebra.LeaseStatus(1), res.Status.LeaseStatus)
 }
